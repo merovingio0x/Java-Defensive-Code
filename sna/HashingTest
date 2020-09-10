@@ -1,0 +1,53 @@
+			// test
+
+			byte[] test = HashUtils.generateSalt(100);
+			System.out.println("test as byte[] " + test);
+			System.out.println("test tostring " + test.toString());
+			System.out.println("test hex " + HashUtils.bytesToHex(test));
+
+			System.out.println("digest to string " + msgDigest.digest(test).toString());
+			System.out.println("digest to hex " + HashUtils.bytesToHex(msgDigest.digest(test)));
+			System.out.println("hex digest di test.tostring getbytes "
+					+ HashUtils.bytesToHex(msgDigest.digest(test.toString().getBytes())));
+			System.out.println("hex digest di test.tostring.toCharArray.tobytes "
+					+ HashUtils.bytesToHex(msgDigest.digest(HashUtils.toBytes(test.toString().toCharArray()))));
+
+			String test2 = HashUtils.bytesToHex(test);
+
+			System.out.println(
+					"hex digest di test2.getbytes " + HashUtils.bytesToHex(msgDigest.digest(test2.getBytes())));
+			System.out.println("hex digest di test2.toCharArray.tobytes "
+					+ HashUtils.bytesToHex(msgDigest.digest(HashUtils.toBytes(test2.toCharArray()))));
+			
+			
+			System.out.println(">----------------<");
+			byte[] test3 = HashUtils.generateSalt(100);
+			msgDigest.update(Base64.getEncoder().encodeToString(test3).getBytes());
+			String test3Hash = Base64.getEncoder().encodeToString(msgDigest.digest());
+			System.out.println("test3 byte[]: "+ test3);
+
+			System.out.println("HASHED FROM byte to base64: "+ test3Hash);
+
+			String test4Clear= Base64.getEncoder().encodeToString(test3);
+			System.out.println("test4Clear byte[]: "+ test4Clear.getBytes());
+
+			System.out.println("Plaintext encoded with base64 : " + test4Clear);
+			msgDigest.reset();
+			msgDigest.update(test4Clear.getBytes(StandardCharsets.UTF_8));
+			String test4Hash = Base64.getEncoder().encodeToString(msgDigest.digest());
+			System.out.println("Hashed from string to base64 " + test4Hash);
+			
+			
+			
+			msgDigest.reset();
+			msgDigest.update(test3);
+			String test6Hash = Base64.getEncoder().encodeToString(msgDigest.digest());
+			byte[] test5Clear= Base64.getDecoder().decode(test6Hash);
+			System.out.println("test5Clear = test3 decoded from base64 " + test5Clear);
+			
+			msgDigest.reset();
+			msgDigest.update(test5Clear);
+			String test5Hash = Base64.getEncoder().encodeToString(msgDigest.digest());
+			System.out.println("Hashed from string to base64 " + test5Hash);
+
+			System.out.println(">----------------<");
